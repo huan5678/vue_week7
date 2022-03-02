@@ -4,14 +4,14 @@ import { useRouter } from 'vue-router';
 import { $vfm } from 'vue-final-modal';
 
 import useStore from '@/stores';
-import ProductsTable from '@/components/ProductsTable.vue';
+import DashboardTable from '@/components/DashboardTable.vue';
 import ModalCardDetail from '@/components/ModalCardDetail.vue';
 import ModalCardDelete from '@/components/ModalCardDelete.vue';
 import ModalCardAddition from '@/components/ModalCardAddition.vue';
 
 export default {
   components: {
-    ProductsTable,
+    DashboardTable,
     ModalCardDetail,
     ModalCardDelete,
     ModalCardAddition,
@@ -47,7 +47,7 @@ export default {
 <template>
   <main class="bg-gray-100">
     <div class="container">
-      <ProductsTable :handleOpenModal="handleOpenModal" />
+      <DashboardTable :handleOpenModal="handleOpenModal" />
       <vue-final-modal
         v-model="isOpenModal"
         id="adminModal"

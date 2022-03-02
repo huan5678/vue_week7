@@ -2,7 +2,7 @@ import { reactive, inject } from 'vue';
 import { defineStore } from 'pinia';
 import { useAdminStore } from '@/stores/admin';
 
-export const useAdminProductStore = defineStore('adminProduct', () => {
+export const useAdminDataStore = defineStore('adminData', () => {
   const axios = inject('axios');
   const baseUrl = process.env.VUE_APP_API_URL;
   const apiPath = process.env.VUE_APP_API_PATH;
@@ -27,28 +27,62 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
 
   const adminStore = useAdminStore();
 
-  //GET products/all, products, orders, coupons, articles, article/{id}
-  // POST product, order/{id}, coupon, article
-  // PUT product/{id}, order/{id}, coupon/{id}, article/{id}
-  // DELETE product/{id}, orders/all, coupons/{id}, article/{id}
+  /*
+  GET products/all, products, orders, coupons, articles, article/{id}
+  POST product, order/{id}, coupon, article
+  PUT product/{id}, order/{id}, coupon/{id}, article/{id}
+  DELETE product/{id}, orders/all, coupons/{id}, article/{id}
+  */
 
-  function handleGetDataAll () {
+  function handleGetDataAll() {
     let target = adminData.selectedTarget;
-    if (target === 'products') {
-      target = 'product';
+    switch (target) {
+      case 'product':
+        target = 'products/all';
+        break;
+      case 'order':
+        target = 'orders';
+        break;
+      case 'coupon':
+        target = 'coupons';
+        break;
+      case 'article':
+        target = 'articles';
+        break;
+      default:
+        target = 'products';
+        break;
     }
     axios
-      .get(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}/all`, { token: adminStore.token })
+      .get(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, { token: adminStore.token })
       .then((res) => {
         // console.log(res.data);
-        adminData.dataList = res.data[`target`];
+        adminData.dataList = res.data[`${target}`];
       })
       .catch((err) => {
         console.dir(err);
       });
   }
-
-  function handleGetDataList(page = adminData.currentPage, category = adminData.category) {
+  // GET products/all, products, orders, coupons, articles, article/{id}
+  function handleGetDataList (page = adminData.currentPage, category = adminData.category) {
+    let target = adminData.selectedTarget;
+    switch (target) {
+      case 'product':
+        target = 'products';
+        break;
+      case 'order':
+        target = 'orders';
+        break;
+      case 'coupon':
+        target = 'coupons';
+        break;
+      case 'article':
+        target = 'articles';
+        break;
+      default:
+        target = 'products';
+        break;
+    }
     let productCategory = category;
     if (category === null) {
       productCategory = '';
@@ -59,40 +93,50 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
       })
       .then((res) => {
         // console.log(res.data);
-        adminData.dataList = res.data[`target`];
+        adminData.dataList = res.data[`${adminData.selectedTarget}`];
         adminData.pagination = res.data.pagination;
       })
       .catch((err) => {
         console.dir(err);
       });
   }
+
   function handleEditData(id, data) {
     axios
-      .put(`${baseUrl}api/${apiPath}/admin/product/${id}`, data, { token: adminStore.token })
+      .put(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}/${id}`, data, { token: adminStore.token })
       .then(() => {
-        handleGetProductList();
+        handleGetDataList();
       })
       .catch((err) => {
         console.dir(err);
       });
   }
 
-  function handleDeleteData(id) {
+  function handleDeleteData (id=null) {
+    let target = adminData.selectedTarget;
+    switch (target) {
+      case 'order':
+        target = 'orders/all';
+        break;
+      case 'coupon':
+        target = 'coupons';
+        break;
+    }
     axios
-      .delete(`${baseUrl}api/${apiPath}/admin/product/${id}`, { token: adminStore.token })
+      .delete(`${baseUrl}api/${apiPath}/admin/${target}/${id}`, { token: adminStore.token })
       .then(() => {
-        handleGetProductList();
+        handleGetDataList();
       })
       .catch((err) => {
         console.dir(err);
       });
   }
 
-  function handleCreateData(data) {
+  function handleCreateData (data) {
     axios
-      .post(`${baseUrl}api/${apiPath}/admin/product`, data, { token: adminStore.token })
+      .post(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, data, { token: adminStore.token })
       .then(() => {
-        handleGetProductList(adminData.currentPage);
+        handleGetDataList(adminData.currentPage);
       })
       .catch((err) => {
         console.dir(err);

@@ -42,10 +42,10 @@ export default {
           <AppLink to="http://google.com">Google</AppLink>
         </li> -->
       </ul>
-      <div class="flex justify-center items-center gap-2" v-if="route.name === 'dashboard'">
+      <div class="flex justify-center items-center gap-4" v-if="route.name === 'dashboard'">
         <h2 class="text-lg text-secondary-50">管理者登出</h2>
         <button
-          class="py-2 px-6 text-white bg-primary-500 hover:shadow-primary-600 rounded
+          class="py-1 px-6 text-white bg-primary-500 hover:shadow-primary-600 rounded
           hover:shadow-inner transition duration-300"
           @click="handleIsLogout()"
         >

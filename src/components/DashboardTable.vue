@@ -1,16 +1,13 @@
 <script>
 import { computed, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import useStore from '@/stores';
 
 export default {
   setup(props, context) {
-    const { adminStore, adminProductStore } = useStore();
-    const { handleSetLogout, handleClearToken } = adminStore;
+    const { adminDataStore } = useStore();
     const {
-      productList, handleGetProductList, functionSelected, handleSelectFunction,
-    } = adminProductStore;
-    const router = useRouter();
+      adminData, handleGetDataList, functionSelected, handleSelectFunction,
+    } = adminDataStore;
     const tempProduct = ref({
       title: '',
       category: '',
@@ -24,11 +21,6 @@ export default {
       imagesUrl: [],
     });
 
-    function handleIsLogout() {
-      handleClearToken();
-      handleSetLogout();
-      router.push('/');
-    }
 
     function openModal(selected, item) {
       context.attrs.handleOpenModal(true);
@@ -36,15 +28,14 @@ export default {
     }
 
     onMounted(() => {
-      handleGetProductList();
-      // handleGetProductAll();
+      handleGetDataList();
+      // handleGetDataAll();
       // console.log(context.attrs);
     });
     return {
-      productList: computed(() => productList),
+      adminData: computed(() => adminData),
       tempProduct,
-      handleIsLogout,
-      handleGetProductList,
+      handleGetDataList,
       functionSelected: computed(() => functionSelected),
       openModal,
     };
@@ -55,14 +46,9 @@ export default {
   <section class="overflow-auto p-2 space-y-4">
     <div class="flex gap-4 justify-end items-center p-6">
       <h2 class="text-4xl font-medium">產品列表</h2>
-      <h2 class="ml-auto text-xl">管理者登出</h2>
-      <button
-        class="py-2 px-6 text-white bg-primary-500 hover:shadow-primary-600 rounded
-        hover:shadow-inner transition duration-300"
-        @click="handleIsLogout()"
-      >
-        登出
-      </button>
+      <ul>
+
+      </ul>
     </div>
     <table class="mb-4 bg-gray-50 rounded table-auto">
       <thead class="bg-gray-800">
@@ -78,7 +64,7 @@ export default {
       <tbody>
         <tr
           class="hover:bg-gray-200 border-b border-gray-300"
-          v-for="item in productList.products"
+          v-for="item in adminData.dataList"
           :key="item.id"
         >
           <td class="py-2 px-4 whitespace-nowrap">{{ item.title }}</td>
@@ -146,7 +132,7 @@ export default {
       </tbody>
     </table>
     <div class="flex justify-between items-center">
-      <p>目前有{{ productList.products.length }}項產品</p>
+      <p>目前有{{ adminData.dataList.length }}項產品</p>
       <button
         type="button"
         class="py-2 px-4 text-primary-500 border border-primary-500
@@ -165,8 +151,8 @@ export default {
             type="button"
             class="p-2 text-primary-500 disabled:text-secondary-300 rounded border
             border-primary-500 disabled:border-secondary-200"
-            :disabled="!productList.pagination.has_pre"
-            @click="handleGetProductList(productList.pagination.current_page - 1)"
+            :disabled="!adminData.pagination.has_pre"
+            @click="handleGetProductList(adminData.pagination.current_page - 1)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -184,12 +170,12 @@ export default {
             </svg>
           </button>
         </li>
-        <li v-for="page in productList.pagination.total_pages" :key="page + new Date()">
+        <li v-for="page in adminData.pagination.total_pages" :key="page + new Date()">
           <button
             type="button"
             class="py-2 px-4 rounded"
             :class="
-              page === productList.pagination.current_page ?
+              page === adminData.pagination.current_page ?
               'bg-primary-600 text-primary-50' : 'text-secondary-400 hover:text-primary-600'
             "
             @click="handleGetProductList(page)"
@@ -203,8 +189,8 @@ export default {
             class="p-2 text-primary-500 disabled:text-secondary-300 rounded border
             border-primary-500 disabled:border-secondary-200
             hover:text-primary-50 hover:bg-primary-400 hover:border-primary-400"
-            :disabled="!productList.pagination.has_next"
-            @click="handleGetProductList(productList.pagination.current_page + 1)"
+            :disabled="!adminData.pagination.has_next"
+            @click="handleGetProductList(adminData.pagination.current_page + 1)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
