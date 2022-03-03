@@ -8,7 +8,8 @@ export const useAdminDataStore = defineStore('adminData', () => {
   const apiPath = process.env.VUE_APP_API_PATH;
 
   const adminData = reactive({
-    selectedTarget: 'products',
+    selectedTarget: 'product',
+    selectedTargetIndex: 0,
     dataList: [],
     pagination: {},
     currentPage: 1,
@@ -64,7 +65,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
       });
   }
   // GET products/all, products, orders, coupons, articles, article/{id}
-  function handleGetDataList (page = adminData.currentPage, category = adminData.category) {
+  function handleGetDataList(page = adminData.currentPage, category = adminData.category) {
     let target = adminData.selectedTarget;
     switch (target) {
       case 'product':
@@ -88,12 +89,12 @@ export const useAdminDataStore = defineStore('adminData', () => {
       productCategory = '';
     }
     axios
-      .get(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}?page=${page}${productCategory}`, {
+      .get(`${baseUrl}api/${apiPath}/admin/${target}/${target !== 'product' ? `?page=${page}` : ''}${productCategory}`, {
         token: adminStore.token,
       })
       .then((res) => {
         // console.log(res.data);
-        adminData.dataList = res.data[`${adminData.selectedTarget}`];
+        adminData.dataList = res.data[`${target}`];
         adminData.pagination = res.data.pagination;
       })
       .catch((err) => {
@@ -112,7 +113,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
       });
   }
 
-  function handleDeleteData (id=null) {
+  function handleDeleteData(id = null) {
     let target = adminData.selectedTarget;
     switch (target) {
       case 'order':
@@ -120,6 +121,9 @@ export const useAdminDataStore = defineStore('adminData', () => {
         break;
       case 'coupon':
         target = 'coupons';
+        break;
+      default:
+        target = 'products';
         break;
     }
     axios
@@ -132,7 +136,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
       });
   }
 
-  function handleCreateData (data) {
+  function handleCreateData(data) {
     axios
       .post(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, data, { token: adminStore.token })
       .then(() => {

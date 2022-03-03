@@ -21,10 +21,34 @@ export default {
       imagesUrl: [],
     });
 
+    const adminListTarget = ref([
+      {
+        en: 'product',
+        zh_Tw: '產品',
+      },
+      {
+        en: 'order',
+        zh_Tw: '訂單',
+      },
+      {
+        en: 'coupon',
+        zh_Tw: '優惠券',
+      },
+      {
+        en: 'article',
+        zh_Tw: '文章',
+      },
+    ]);
 
     function openModal(selected, item) {
       context.attrs.handleOpenModal(true);
       handleSelectFunction(selected, item);
+    }
+
+    function handleSelectListType(target, idx) {
+      adminData.selectedTarget = target;
+      adminData.selectedTargetIndex = idx;
+      handleGetDataList();
     }
 
     onMounted(() => {
@@ -33,6 +57,8 @@ export default {
       // console.log(context.attrs);
     });
     return {
+      adminListTarget,
+      handleSelectListType,
       adminData: computed(() => adminData),
       tempProduct,
       handleGetDataList,
@@ -44,10 +70,22 @@ export default {
 </script>
 <template>
   <section class="overflow-auto p-2 space-y-4">
-    <div class="flex gap-4 justify-end items-center p-6">
-      <h2 class="text-4xl font-medium">產品列表</h2>
-      <ul>
-
+    <div class="flex gap-4 justify-center items-end p-6">
+      <h2 class="text-4xl font-medium">
+        {{adminListTarget[adminData.selectedTargetIndex].zh_Tw}}列表
+      </h2>
+      <ul class="flex ml-auto">
+        <li v-for="(item, idx) in adminListTarget" :key="item">
+          <button type="button"
+          class="px-2 border-b"
+          :class="adminData.selectedTargetIndex === idx ?
+          'text-secondary-700 border-secondary-700 border-b' :
+          `text-secondary-300 border-secondary-300
+          hover:text-secondary-500 hover:border-secondary-500`"
+          @click="handleSelectListType(item.en, idx)">
+            {{ item.zh_Tw }}
+          </button>
+        </li>
       </ul>
     </div>
     <table class="mb-4 bg-gray-50 rounded table-auto">
@@ -132,7 +170,7 @@ export default {
       </tbody>
     </table>
     <div class="flex justify-between items-center">
-      <p>目前有{{ adminData.dataList.length }}項產品</p>
+      <p>目前有{{ adminData.dataList?.length }}項產品</p>
       <button
         type="button"
         class="py-2 px-4 text-primary-500 border border-primary-500
