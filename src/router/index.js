@@ -4,39 +4,39 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/FrontEndView.vue'),
+    component: () => import('@/views/frontEnd/FrontEndView.vue'),
     children: [
       {
         path: '/',
         name: 'home',
-        component: () => import('@/views/HomeView.vue'),
+        component: () => import('@/views/frontEnd/HomeView.vue'),
       },
       {
         path: 'product',
         name: 'product',
-        component: () => import('@/views/ProductView.vue'),
+        component: () => import('@/views/frontEnd/ProductView.vue'),
       },
       {
         path: 'detail/:id',
         name: 'product-detail',
-        component: () => import('@/views/ProductDetailView.vue'),
+        component: () => import('@/views/frontEnd/ProductDetailView.vue'),
       },
       {
         path: 'login',
         name: 'login',
-        component: () => import('@/views/LoginView.vue'),
+        component: () => import('@/views/frontEnd/LoginView.vue'),
       },
     ],
   },
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import('@/views/BackEndView.vue'),
+    component: () => import('@/views/backEnd/BackEndView.vue'),
     children: [
       {
         path: '',
         name: 'dashboard',
-        component: () => import('@/views/DashboardView.vue'),
+        component: () => import('@/views/backEnd/DashboardView.vue'),
       },
     ],
   },

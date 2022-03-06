@@ -1,6 +1,6 @@
 <script>
 import {
-  ref, onMounted, inject, computed, reactive,
+  ref, inject, reactive, onBeforeMount,
 } from 'vue';
 import { useRouter } from 'vue-router';
 import useStore from '@/stores';
@@ -14,7 +14,9 @@ export default {
     const baseUrl = process.env.VUE_APP_API_URL;
     const axios = inject('axios');
     const { adminStore } = useStore();
-    const { handleSetLogin, handleCheckUser, isLoggedIn } = adminStore;
+    const {
+      handleSetLogin, handleCheckUser, handleGetToken,
+    } = adminStore;
     const router = useRouter();
     const userName = ref('');
     const userPassword = ref('');
@@ -52,15 +54,15 @@ export default {
         });
     }
 
-    const checkLogin = computed(() => isLoggedIn);
-
     const cancel = function () {
       openModal.value = false;
     };
 
-    onMounted(() => {
-      handleCheckUser();
-      if (checkLogin.value) {
+    onBeforeMount(() => {
+      handleGetToken();
+      if (handleCheckUser()) {
+        router.push('/login');
+      } else {
         router.push('/admin');
       }
     });

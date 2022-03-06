@@ -6,9 +6,9 @@ import ModalCardTitle from './ModalCardTitle.vue';
 export default {
   components: { ModalCardTitle },
   setup(props, context) {
-    const { adminProductStore } = useStore();
+    const { adminDataStore } = useStore();
     return {
-      targetProduct: computed(() => adminProductStore.productList.tempProduct),
+      targetProduct: computed(() => adminDataStore.adminData.tempProduct),
       handleOpenModal: context.attrs.handleOpenModal,
     };
   },
@@ -19,22 +19,22 @@ export default {
   <section class="flex overflow-hidden flex-col pb-4 space-y-4 bg-gray-50 rounded-md">
     <ModalCardTitle title="產品詳細內容" :close-modal="handleOpenModal" />
     <div class="flex justify-between p-4">
-      <img class="max-h-[300px]" :src="targetProduct.imageUrl" :alt="targetProduct.title" />
+      <img class="max-h-[300px]" :src="targetProduct?.imageUrl" :alt="targetProduct?.title" />
       <div class="flex-1 p-4 space-y-8">
         <div class="flex gap-4 items-center">
           <h2 class="mb-2 text-xl font-bold">
-            {{ targetProduct.title }}
+            {{ targetProduct?.title }}
             <span class="py-1 px-2 ml-2 text-sm text-white bg-primary-400 rounded">
-              {{ targetProduct.category }}
+              {{ targetProduct?.category }}
             </span>
           </h2>
           <ul class="flex gap-1 items-center">
             <li v-for="(star, idx) in 5" :key="star + new Date()">
               <svg
-                v-show="targetProduct.rating > idx"
+                v-show="targetProduct?.rating > idx"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
-                class="w-6 h-6 text-warning-500"
+                class="w-6 h-6 text-primary-500"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -45,7 +45,7 @@ export default {
                 />
               </svg>
               <svg
-                v-show="targetProduct.rating <= idx"
+                v-show="targetProduct?.rating <= idx"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 class="w-6 h-6 text-gray-400"
@@ -67,11 +67,11 @@ export default {
         </div>
 
         <ul class="space-y-4">
-          <li>商品描述：{{ targetProduct.description }}</li>
-          <li>商品內容：{{ targetProduct.content }}</li>
+          <li>商品描述：{{ targetProduct?.description }}</li>
+          <li>商品內容：{{ targetProduct?.content }}</li>
           <li>
-            {{ targetProduct.price }}
-            <span class="pl-1 text-gray-400 line-through">{{ targetProduct.origin_price }}</span>
+            {{ targetProduct?.price }}
+            <span class="pl-1 text-gray-400 line-through">{{ targetProduct?.origin_price }}</span>
             個 / 元
           </li>
         </ul>
@@ -79,7 +79,7 @@ export default {
     </div>
     <div class="flex overflow-x-auto gap-4">
       <img
-        v-for="img in targetProduct.imagesUrl"
+        v-for="img in targetProduct?.imagesUrl"
         :key="img"
         class="object-cover flex-auto w-1/12 max-h-48"
         :src="img"

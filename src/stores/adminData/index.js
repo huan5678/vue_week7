@@ -15,6 +15,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
     currentPage: 1,
     category: null,
     tempProduct: {},
+    isOpenModal: false,
   });
 
   const functionSelected = reactive({
@@ -24,6 +25,10 @@ export const useAdminDataStore = defineStore('adminData', () => {
   function handleSelectFunction(selected, item) {
     functionSelected.selected = selected;
     adminData.tempProduct = item;
+  }
+
+  function handleControlModal(boolean = false) {
+    adminData.isOpenModal = boolean;
   }
 
   const adminStore = useAdminStore();
@@ -55,7 +60,9 @@ export const useAdminDataStore = defineStore('adminData', () => {
         break;
     }
     axios
-      .get(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, { token: adminStore.token })
+      .get(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, {
+        token: adminStore.token,
+      })
       .then((res) => {
         // console.log(res.data);
         adminData.dataList = res.data[`${target}`];
@@ -89,9 +96,14 @@ export const useAdminDataStore = defineStore('adminData', () => {
       productCategory = '';
     }
     axios
-      .get(`${baseUrl}api/${apiPath}/admin/${target}/${target !== 'product' ? `?page=${page}` : ''}${productCategory}`, {
-        token: adminStore.token,
-      })
+      .get(
+        `${baseUrl}api/${apiPath}/admin/${target}/${
+          target !== 'product' ? `?page=${page}` : ''
+        }${productCategory}`,
+        {
+          token: adminStore.token,
+        },
+      )
       .then((res) => {
         // console.log(res.data);
         adminData.dataList = res.data[`${target}`];
@@ -104,7 +116,9 @@ export const useAdminDataStore = defineStore('adminData', () => {
 
   function handleEditData(id, data) {
     axios
-      .put(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}/${id}`, data, { token: adminStore.token })
+      .put(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}/${id}`, data, {
+        token: adminStore.token,
+      })
       .then(() => {
         handleGetDataList();
       })
@@ -138,7 +152,9 @@ export const useAdminDataStore = defineStore('adminData', () => {
 
   function handleCreateData(data) {
     axios
-      .post(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, data, { token: adminStore.token })
+      .post(`${baseUrl}api/${apiPath}/admin/${adminData.selectedTarget}`, data, {
+        token: adminStore.token,
+      })
       .then(() => {
         handleGetDataList(adminData.currentPage);
       })
@@ -158,6 +174,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
   return {
     adminData,
     functionSelected,
+    handleControlModal,
     handleCreateData,
     handleGetDataAll,
     handleGetDataList,

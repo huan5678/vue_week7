@@ -1,0 +1,105 @@
+<script>
+import { computed, ref } from 'vue';
+import useStore from '@/stores';
+import useHelper from '@/helpers';
+
+export default {
+  setup() {
+    const { adminDataStore } = useStore();
+    const { adminData, handleGetDataList, handleSelectFunction } = adminDataStore;
+    const { getDate, moneyFormat } = useHelper();
+
+    const tempProduct = ref({
+      name: '',
+      email: '',
+      tel: '',
+      address: '',
+    });
+
+    function openModal(selected, item) {
+      adminData.isOpenModal = true;
+      handleSelectFunction(selected, item);
+    }
+
+    return {
+      getDate,
+      moneyFormat,
+      handleGetDataList,
+      openModal,
+      tempProduct,
+      adminData: computed(() => adminData),
+    };
+  },
+};
+</script>
+<template>
+  <table class="mb-4 bg-gray-50 rounded table-auto">
+    <thead class="bg-gray-800">
+      <tr class="text-white">
+        <td width="200" class="p-4 text-lg whitespace-nowrap">訂單編號</td>
+        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">訂購日期</td>
+        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">訂單總價</td>
+        <td width="250" class="p-4 text-lg text-center whitespace-nowrap">是否付款</td>
+        <td width="200" class="p-4 text-lg text-center whitespace-nowrap">查看細節</td>
+        <td colspan="2" width="400" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="hover:bg-gray-200 border-b border-gray-300"
+        v-for="item in adminData.dataList"
+        :key="item.id"
+      >
+        <td class="py-2 px-4 whitespace-nowrap">{{ item.id }}</td>
+        <td class="py-2 px-4 text-right whitespace-nowrap">
+          {{ getDate(item.create_at) }}
+        </td>
+        <td class="py-2 px-4 text-right whitespace-nowrap">
+          {{ moneyFormat(item.total) }}
+        </td>
+        <td
+          class="py-2 px-4 text-center text-primary-400 whitespace-nowrap"
+        >
+          {{ item.is_paid ? '已付款' : '未付款' }}
+        </td>
+
+        <td class="py-2 px-4 text-center whitespace-nowrap">
+          <button
+            type="button"
+            class="py-2 px-4 text-primary-500 border-primary-500 border
+            rounded hover:shadow transition duration-200
+            hover:shadow-primary-400 hover:bg-primary-600 hover:text-primary-50"
+            @click="openModal('getOrderDetail', item)"
+          >
+            查看細節
+          </button>
+        </td>
+        <td class="py-2 px-4 text-center whitespace-nowrap">
+          <button
+            type="button"
+            class="py-2 px-4 text-secondary-50 bg-secondary-400 rounded
+            hover:bg-secondary-500 hover:shadow
+            hover:shadow-secondary-400 transition duration-200"
+            @click="openModal('orderEdit', item)"
+          >
+            修改內容
+          </button>
+        </td>
+        <td class="py-2 px-4 text-center whitespace-nowrap">
+          <button
+            type="button"
+            class="py-2 px-4 text-secondary-400 border border-secondary-300 rounded
+            transition duration-200 hover:border-transparent hover:text-white
+            hover:shadow hover:shadow-secondary-400 hover:bg-secondary-500"
+            @click="openModal('productDelete', item)"
+          >
+            刪除訂單
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="flex justify-between items-center">
+    <p>目前有 {{ adminData.dataList.length }} 筆訂單</p>
+  </div>
+</template>
