@@ -9,6 +9,8 @@ import ModalProductDetail from '@/components/modal/ModalProductDetail.vue';
 import ModalCardDelete from '@/components/modal/ModalCardDelete.vue';
 import ModalProductAddition from '@/components/modal/ModalProductAddition.vue';
 import ModalOrderDetail from '@/components/modal/ModalOrderDetail.vue';
+import ModalCouponDetail from '@/components/modal/ModalCouponDetail.vue';
+import ModalCouponAddition from '@/components/modal/ModalCouponAddition.vue';
 
 export default {
   components: {
@@ -17,6 +19,8 @@ export default {
     ModalProductDetail,
     ModalProductAddition,
     ModalOrderDetail,
+    ModalCouponDetail,
+    ModalCouponAddition,
   },
   setup() {
     const { adminStore, adminDataStore } = useStore();
@@ -72,6 +76,10 @@ export default {
           v-if="modalState === 'productEdit' || modalState === 'productCreate'"
           :handleOpenModal="handleOpenModal"
         />
+        <ModalCouponDetail v-if="modalState === 'couponDetail'"
+        :handleOpenModal="handleOpenModal" />
+        <ModalCouponAddition v-if="modalState === 'couponEdit' || 'couponCreate'"
+        :handleOpenModal="handleOpenModal" />
       </vue-final-modal>
     </div>
   </main>

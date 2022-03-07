@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from 'vue';
 import useStore from '@/stores';
 import ProductsTable from '@/components/table/ProductsTable.vue';
 import OrdersTable from '@/components/table/OrdersTable.vue';
+import CuponsTable from '@/components/table/CuponsTable.vue';
 
 export default {
   setup() {
@@ -47,6 +48,7 @@ export default {
   components: {
     ProductsTable,
     OrdersTable,
+    CuponsTable,
   },
 };
 </script>
@@ -76,13 +78,16 @@ export default {
     </div>
     <ProductsTable v-if="adminData.selectedTarget === 'product'" />
     <OrdersTable v-if="adminData.selectedTarget === 'order'" />
+    <CuponsTable v-if="adminData.selectedTarget === 'coupon'" />
     <!-- 分頁 -->
-    <ul class="flex gap-2 justify-center items-center">
+    <ul class="flex gap-2 justify-center items-center pb-12">
       <li class>
         <button
           type="button"
           class="p-2 text-primary-500 disabled:text-secondary-300 rounded border
           border-primary-500 disabled:border-secondary-200"
+          :class="!adminData.pagination?.has_pre ?
+          '' : 'hover:bg-primary-600 hover:text-white' "
           :disabled="!adminData.pagination?.has_pre"
           @click="handleGetDataList(adminData.pagination?.current_page - 1)"
         >
@@ -102,13 +107,19 @@ export default {
           </svg>
         </button>
       </li>
-      <li v-for="page in adminData.pagination?.total_pages" :key="page + new Date()">
+      <li
+      class=""
+      v-for="page in adminData.pagination?.total_pages"
+      :key="page + new Date()">
         <button
           type="button"
-          class="py-2 px-4 rounded"
+          class="py-1 px-3 rounded"
           :class="
             page === adminData.pagination?.current_page ?
-            'bg-primary-600 text-primary-50' : 'text-secondary-400 hover:text-primary-600'
+            'bg-primary-600 text-primary-50 py-1.5 px-3.5' :
+            `text-secondary-400 hover:border
+            hover:text-primary-600 hover:border-primary-600
+            `
           "
           @click="handleGetDataList(page)"
         >
@@ -119,8 +130,9 @@ export default {
         <button
           type="button"
           class="p-2 text-primary-500 disabled:text-secondary-300 rounded border
-          border-primary-500 disabled:border-secondary-200
-          hover:text-primary-50 hover:bg-primary-400 hover:border-primary-400"
+          border-primary-500 disabled:border-secondary-200"
+          :class="!adminData.pagination?.has_next ?
+          '' : 'hover:bg-primary-600 hover:text-white' "
           :disabled="!adminData.pagination?.has_next"
           @click="handleGetDataList(adminData.pagination?.current_page + 1)"
         >
