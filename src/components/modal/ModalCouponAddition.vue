@@ -1,5 +1,5 @@
 <script>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import useStore from '@/stores';
 import ModalCardTitle from './ModalCardTitle.vue';
 
@@ -13,8 +13,6 @@ export default {
     } = adminDataStore;
 
     const couponData = computed(() => adminData.tempProduct);
-
-    const imageFile = ref(null);
 
     function closeModal() {
       context.attrs.handleOpenModal(false);
@@ -64,7 +62,6 @@ export default {
     return {
       selectType: computed(() => functionSelected.selected),
       couponData,
-      imageFile,
       handleResetFormInput,
       handleProductAddition,
       handleOpenModal: context.attrs.handleOpenModal,

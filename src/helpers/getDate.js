@@ -1,5 +1,11 @@
 const getDate = (timestamp = 0) => {
-  const date = new Date(timestamp);
+  let times = null;
+  if (`${timestamp}`.length < 13) {
+    times = timestamp * 1000;
+  } else {
+    times = timestamp;
+  }
+  const date = new Date(times);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();

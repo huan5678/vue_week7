@@ -4,6 +4,7 @@ import useStore from '@/stores';
 import ProductsTable from '@/components/table/ProductsTable.vue';
 import OrdersTable from '@/components/table/OrdersTable.vue';
 import CuponsTable from '@/components/table/CuponsTable.vue';
+import ArticlesTable from '@/components/table/ArticlesTable.vue';
 
 export default {
   setup() {
@@ -49,6 +50,7 @@ export default {
     ProductsTable,
     OrdersTable,
     CuponsTable,
+    ArticlesTable,
   },
 };
 </script>
@@ -79,6 +81,7 @@ export default {
     <ProductsTable v-if="adminData.selectedTarget === 'product'" />
     <OrdersTable v-if="adminData.selectedTarget === 'order'" />
     <CuponsTable v-if="adminData.selectedTarget === 'coupon'" />
+    <ArticlesTable v-if="adminData.selectedTarget === 'article'" />
     <!-- 分頁 -->
     <ul class="flex gap-2 justify-center items-center pb-12">
       <li class>

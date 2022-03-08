@@ -11,6 +11,9 @@ import ModalProductAddition from '@/components/modal/ModalProductAddition.vue';
 import ModalOrderDetail from '@/components/modal/ModalOrderDetail.vue';
 import ModalCouponDetail from '@/components/modal/ModalCouponDetail.vue';
 import ModalCouponAddition from '@/components/modal/ModalCouponAddition.vue';
+import ModalArticleAddition from '@/components/modal/ModalArticleAddition.vue';
+import ModalArticleDetail from '@/components/modal/ModalArticleDetail.vue';
+import ModalOrderAddition from '@/components/modal/ModalOrderAddition.vue';
 
 export default {
   components: {
@@ -21,6 +24,9 @@ export default {
     ModalOrderDetail,
     ModalCouponDetail,
     ModalCouponAddition,
+    ModalArticleAddition,
+    ModalArticleDetail,
+    ModalOrderAddition,
   },
   setup() {
     const { adminStore, adminDataStore } = useStore();
@@ -69,16 +75,23 @@ export default {
         <ModalProductDetail
         v-if="modalState === 'getProductDetail'"
         :handleOpenModal="handleOpenModal" />
-        <ModalOrderDetail
-        v-if="modalState === 'getOrderDetail'"
-        :handleOpenModal="handleOpenModal" />
         <ModalProductAddition
           v-if="modalState === 'productEdit' || modalState === 'productCreate'"
           :handleOpenModal="handleOpenModal"
         />
+        <ModalOrderDetail
+        v-if="modalState === 'getOrderDetail'"
+        :handleOpenModal="handleOpenModal" />
+        <ModalOrderAddition
+        v-if="modalState === 'orderEdit'"
+        :handleOpenModal="handleOpenModal" />
         <ModalCouponDetail v-if="modalState === 'couponDetail'"
         :handleOpenModal="handleOpenModal" />
-        <ModalCouponAddition v-if="modalState === 'couponEdit' || 'couponCreate'"
+        <ModalCouponAddition v-if="modalState === 'couponEdit' || modalState === 'couponCreate'"
+        :handleOpenModal="handleOpenModal" />
+        <ModalArticleDetail v-if="modalState === 'getArticleDetail'"
+        :handleOpenModal="handleOpenModal" />
+        <ModalArticleAddition v-if="modalState === 'articleEdit' || modalState === 'articleCreate'"
         :handleOpenModal="handleOpenModal" />
       </vue-final-modal>
     </div>

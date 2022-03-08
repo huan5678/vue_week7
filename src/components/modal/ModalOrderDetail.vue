@@ -36,7 +36,8 @@ export default {
         <h2 class="text-2xl font-medium">{{targetProduct?.user.address}}</h2>
       </div>
     </div>
-    <div class="flex justify-around gap-2 p-2">
+    <div class="flex flex-wrap justify-around gap-2 p-2">
+      <h2 class="text-sm w-full ml-4">訂購商品</h2>
       <div v-for="item in targetProduct?.products" :key="item.id">
         <img class="h-32 w-32 object-cover"
         :src="item.product.imageUrl" :alt="item.product.title" />

@@ -17,7 +17,7 @@ export default {
 
 <template>
   <section class="flex overflow-hidden flex-col pb-4 space-y-4 bg-gray-50 rounded-md">
-    <ModalCardTitle title="產品詳細內容" :close-modal="handleOpenModal" />
+    <ModalCardTitle title="產品詳細內容" className="bg-primary-600" :close-modal="handleOpenModal" />
     <div class="flex justify-between p-4">
       <img class="max-h-[300px]" :src="targetProduct?.imageUrl" :alt="targetProduct?.title" />
       <div class="flex-1 p-4 space-y-8">

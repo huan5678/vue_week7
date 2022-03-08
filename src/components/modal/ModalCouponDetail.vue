@@ -28,15 +28,9 @@ export default {
   <section class="flex overflow-hidden flex-col pb-4 space-y-4 bg-gray-50 rounded-md">
     <ModalCardTitle
       title="訂單詳細內容"
+      className="bg-primary-600"
       :close-modal="handleOpenModal"
     />
-    <!--
-      title: '',
-      percent: 0,
-      is_enabled: 1,
-      due_date: '',
-      code: '',
-    -->
     <div class="flex justify-between p-4">
       <div class="p-2 divide-y">
         <span class="block text-sm">優惠券名稱</span>

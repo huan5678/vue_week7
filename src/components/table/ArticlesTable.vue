@@ -8,10 +8,14 @@ export default {
     const { adminData, handleGetDataList, handleSelectFunction } = adminDataStore;
     const tempProduct = ref({
       title: '',
-      percent: 0,
-      is_enabled: 1,
-      due_date: '',
-      code: '',
+      author: '',
+      isPublic: false,
+      content: '',
+      description: '',
+      create_at: '',
+      is_enabled: '',
+      image: '',
+      tag: [],
     });
 
     function openModal(selected, item) {
@@ -19,17 +23,7 @@ export default {
       handleSelectFunction(selected, item);
     }
 
-    function handleDateChange(timestamp) {
-      const time = parseInt(timestamp, 10);
-      const date = new Date(time);
-      return `
-      ${date.getFullYear()} 年 ${date.getMonth() + 1} 月 ${date.getDate()} 日 -
-      ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}
-      `;
-    }
-
     return {
-      handleDateChange,
       handleGetDataList,
       openModal,
       tempProduct,
@@ -42,43 +36,37 @@ export default {
   <table class="mb-4 bg-gray-50 rounded table-auto">
     <thead class="bg-gray-800">
       <tr class="text-white">
-        <td width="300" class="p-4 text-lg whitespace-nowrap">優惠券名稱</td>
-        <td width="200" class="p-4 text-lg text-center whitespace-nowrap">優惠券代碼</td>
-        <td width="200" class="p-4 text-lg text-right whitespace-nowrap">優惠券折價</td>
-        <td width="200" class="p-4 text-lg text-center whitespace-nowrap">是否啟用</td>
-        <td width="250" class="p-4 text-lg text-center whitespace-nowrap">使用期限</td>
-        <td colspan="3" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
+        <td width="200" class="p-4 text-lg whitespace-nowrap">文章標題</td>
+        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">副標題</td>
+        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">標籤</td>
+        <td width="250" class="p-4 text-lg text-center whitespace-nowrap">是否公開</td>
+        <td colspan="3" width="400" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
       </tr>
     </thead>
     <tbody>
       <tr
         class="hover:bg-gray-200 border-b border-gray-300"
-        v-for="item in adminData?.dataList"
-        :key="item?.title"
+        v-for="item in adminData.dataList"
+        :key="item.id"
       >
-        <td class="py-2 px-4 whitespace-nowrap">{{ item?.title }}</td>
-        <td class="py-2 px-4 text-center whitespace-nowrap">{{ item?.code }}</td>
-        <td class="py-2 px-4 text-right whitespace-nowrap">
-          {{ item?.percent }}
-        </td>
-        <td class="py-2 px-4 text-center whitespace-nowrap">
-          {{ item?.is_enabled ? '已啟用' : '未啟用' }}
-        </td>
+        <td class="py-2 px-4 whitespace-nowrap">{{ item.title }}</td>
+        <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.description }}</td>
+        <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.tag }}</td>
         <td
-          class="py-2 px-4 text-center text-primary-600 whitespace-nowrap"
+          class="py-2 px-4 text-center whitespace-nowrap"
+          :class="item.isPublic ? 'text-secondary-300' : 'text-primary-600'"
         >
-          {{ handleDateChange(item?.due_date) }}
+          {{ item.isPublic ? '公開' : '未公開' }}
         </td>
-
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
             class="py-2 px-4 text-primary-500 border-primary-500 border
             rounded hover:shadow transition duration-200
             hover:shadow-primary-400 hover:bg-primary-600 hover:text-primary-50"
-            @click="openModal('getCouponDetail', item)"
+            @click="openModal('getArticleDetail', item)"
           >
-            查看細節
+            查看內容
           </button>
         </td>
         <td class="py-2 px-4 text-center whitespace-nowrap">
@@ -87,7 +75,7 @@ export default {
             class="py-2 px-4 text-secondary-50 bg-secondary-400 rounded
             hover:bg-secondary-500 hover:shadow
             hover:shadow-secondary-400 transition duration-200"
-            @click="openModal('couponEdit', item)"
+            @click="openModal('articleEdit', item)"
           >
             修改內容
           </button>
@@ -100,22 +88,22 @@ export default {
             hover:shadow hover:shadow-secondary-400 hover:bg-secondary-500"
             @click="openModal('productDelete', item)"
           >
-            刪除優惠券
+            刪除文章
           </button>
         </td>
       </tr>
     </tbody>
   </table>
   <div class="flex justify-between items-center">
-    <p>目前有 {{ adminData.dataList?.length }} 種優惠券</p>
+    <p>目前有{{ adminData.dataList.length }}篇文章</p>
     <button
       type="button"
       class="py-2 px-4 text-primary-500 border border-primary-500
         transition duration-200 rounded hover:text-primary-50
         hover:shadow hover:shadow-primary-400 hover:bg-primary-600"
-      @click="openModal('couponCreate', tempProduct)"
+      @click="openModal('articleCreate', tempProduct)"
     >
-      新增優惠券
+      新增文章
     </button>
   </div>
 </template>
