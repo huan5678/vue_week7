@@ -36,15 +36,15 @@ export default {
   <table class="table w-full">
     <thead>
       <tr class="text-secondary-400">
-        <td width="200" class="font-normal text-lg
+        <td width="200" class="bg-secondary-100 font-normal text-lg
         whitespace-nowrap">產品名稱</td>
-        <td width="250" class="font-normal text-lg
+        <td width="250" class="bg-secondary-100 font-normal text-lg
         text-right whitespace-nowrap">原價</td>
-        <td width="250" class="font-normal text-lg
+        <td width="250" class="bg-secondary-100 font-normal text-lg
         text-right whitespace-nowrap">售價</td>
-        <td width="250" class="font-normal text-lg
+        <td width="250" class="bg-secondary-100 font-normal text-lg
         text-center whitespace-nowrap">是否啟用</td>
-        <td colspan="3" width="400" class="font-normal text-lg
+        <td colspan="3" width="400" class="bg-secondary-100 font-normal text-lg
         text-center whitespace-nowrap">功能</td>
       </tr>
     </thead>

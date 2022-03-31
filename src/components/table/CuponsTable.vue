@@ -42,18 +42,18 @@ export default {
   <div class="overflow-x-auto">
     <table class="table w-full">
       <thead class="">
-        <tr class="text-secondary-200">
-          <td width="300" class="font-normal text-lg
+        <tr class="text-secondary-400">
+          <td width="300" class="bg-secondary-100 font-normal text-lg
           whitespace-nowrap">優惠券名稱</td>
-          <td width="200" class="font-normal text-lg
+          <td width="200" class="bg-secondary-100 font-normal text-lg
           text-center whitespace-nowrap">優惠券代碼</td>
-          <td width="200" class="font-normal text-lg
+          <td width="200" class="bg-secondary-100 font-normal text-lg
           text-right whitespace-nowrap">優惠券折價</td>
-          <td width="200" class="font-normal text-lg
+          <td width="200" class="bg-secondary-100 font-normal text-lg
           text-center whitespace-nowrap">是否啟用</td>
-          <td width="250" class="font-normal text-lg
+          <td width="250" class="bg-secondary-100 font-normal text-lg
           text-center whitespace-nowrap">使用期限</td>
-          <td colspan="3" class="font-normal text-lg
+          <td colspan="3" class="bg-secondary-100 font-normal text-lg
           text-center whitespace-nowrap">功能</td>
         </tr>
       </thead>

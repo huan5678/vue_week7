@@ -95,16 +95,16 @@ export default {
         :disabled="cartListLength === 0"
         :class="{ 'opacity-30 cursor-not-allowed': cartListLength === 0 }"
       />
-      <div>
+      <div class="form-control">
         <label
           for="userRemark"
-          class="block mb-2"
+          class="label mb-2"
           :class="{ 'opacity-30 cursor-not-allowed': cartListLength === 0 }"
           >備註</label>
         <textarea
           id="userRemark"
           name="userRemark"
-          class="w-full form-control"
+          class="w-full form-style"
           v-model="userRemark"
           rows="4"
           placeholder="想要告訴我們什麼？"
@@ -116,8 +116,8 @@ export default {
       <div class="pt-12">
         <button
           type="submit"
-          class="grid place-content-center py-3 mx-auto w-10/12 text-xl
-          text-white bg-black rounded transition duration-300 ease-in-out hover:bg-primary-700"
+          class="btn font-normal w-full text-xl rounded
+          transition duration-300 ease-in-out"
           :class="{
             'opacity-30 cursor-not-allowed': cartListLength === 0,
           }"
