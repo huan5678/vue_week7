@@ -1,5 +1,6 @@
 <script>
 import { computed } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 import useStore from '@/stores';
 import ModalCardTitle from './ModalCardTitle.vue';
 
@@ -56,7 +57,8 @@ export default {
     }
 
     function handleCreateCode() {
-      couponData.value.code = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+      // couponData.value.code = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+      [couponData.value.code] = uuidv4().split('-');
     }
 
     return {
@@ -80,7 +82,7 @@ export default {
       :close-modal="handleOpenModal"
     />
     <form class="container p-4 space-y-4" @submit.prevent="handleProductAddition">
-      <div class="flex flex-wrap space-between">
+      <div class="flex flex-wrap justify-between">
         <div class="flex gap-4 justify-between w-full">
           <div class="flex-auto">
             <label for="couponName" class="block mb-4"
@@ -89,35 +91,35 @@ export default {
                 type="text"
                 id="couponName"
                 name="couponName"
-                class="w-full rounded"
+                class="w-full form-style"
                 v-model="couponData.title"
                 required
               />
           </div>
-          <div class="flex-auto">
-            <label for="couponCode" class="block mb-4"
-              >產生優惠券代碼</label>
-              <div class="flex gap-1">
+          <div class="form-control">
+            <label for="couponCode" class="label"
+              ><span class="label-text">產生優惠券代碼</span></label>
+              <div class="flex gap-2">
                 <span class="form-control">{{ couponData.code }}</span>
                 <button
                   type="button"
                   id="couponCode"
                   name="couponCode"
-                  class="w-full rounded bg-primary-500 p-2"
+                  class="btn btn-sm btn-square btn-outline"
                   @click="handleCreateCode"
                 >
-                <i class="text-white bi bi-gift-fill"></i>
+                <i class="bi bi-gift-fill"></i>
                 </button>
               </div>
           </div>
-          <div class="flex-auto">
-            <label for="couponPercent" class="block mb-4"
-              >優惠券折價</label>
+          <div class="form-control">
+            <label for="couponPercent" class="label"
+              ><span class="label-text">優惠券折價</span></label>
               <input
                 type="text"
                 id="couponPercent"
                 name="couponPercent"
-                class="w-full rounded"
+                class="w-full form-style"
                 v-model="couponData.percent"
                 required
               />
@@ -125,22 +127,22 @@ export default {
         </div>
       </div>
       <div class="flex gap-4 justify-between w-full">
-        <div class="flex-auto">
-          <label for="couponDate" class="block mb-4"
-            >優惠券使用期限</label>
+        <div class="form-control">
+          <label for="couponDate" class="label"
+            ><span class="label-text">優惠券使用期限</span></label>
             <input
               type="date"
               id="couponDate"
               name="couponDate"
-              class="w-full rounded"
+              class="w-full form-style"
               v-model="couponData.due_date"
             />
         </div>
         <div class="flex-auto">
           <span class="block mb-4">是否啟用優惠券</span>
-          <div class="flex justify-start items-center gap-2">
+          <div class="flex gap-2 justify-start items-center">
             <input id="couponIsEnabled"
-            class="rounded"
+            class="toggle"
               type="checkbox"
               v-model="couponData.is_enabled"
               />
@@ -160,8 +162,8 @@ export default {
           {{ selectType === 'productEdit' ? '取消修改' : '取消新增' }}
         </button>
         <button
-          class="flex-auto py-2 text-white bg-primary-500 rounded-md
-          hover:bg-primary-600 hover:shadow hover:shadow-primary-400
+          class="flex-auto py-2 text-white bg-primary-500 hover:bg-primary-600
+          rounded-md hover:shadow hover:shadow-primary-400
           transition duration-300"
           type="submit"
         >

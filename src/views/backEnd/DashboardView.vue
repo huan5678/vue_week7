@@ -1,6 +1,9 @@
 <script>
-import { onMounted, computed, toRef } from 'vue';
-import { useRouter } from 'vue-router';
+import {
+  onBeforeMount,
+  computed,
+  toRef,
+} from 'vue';
 import { $vfm } from 'vue-final-modal';
 
 import useStore from '@/stores';
@@ -33,8 +36,6 @@ export default {
     const { handleCheckUser, handleGetToken } = adminStore;
     const { functionSelected, adminData } = adminDataStore;
 
-    const router = useRouter();
-
     function handleOpenModal(boolean = true) {
       adminData.isOpenModal = boolean;
       $vfm.show('adminModal');
@@ -42,13 +43,9 @@ export default {
 
     const isOpenModal = toRef(adminData, 'isOpenModal');
 
-    onMounted(() => {
+    onBeforeMount(() => {
       handleGetToken();
-      if (!handleCheckUser()) {
-        router.push('/admin');
-      } else {
-        router.push('/login');
-      }
+      handleCheckUser();
     });
 
     return {

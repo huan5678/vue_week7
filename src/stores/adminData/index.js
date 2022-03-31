@@ -22,6 +22,10 @@ export const useAdminDataStore = defineStore('adminData', () => {
     selected: '',
   });
 
+  function handleResetTempProduct() {
+    adminData.tempProduct = {};
+  }
+
   function handleSelectFunction(selected, item) {
     functionSelected.selected = selected;
     adminData.tempProduct = item;
@@ -72,7 +76,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
       });
   }
   // GET products/all, products, orders, coupons, articles, article/{id}
-  function handleGetDataList(page = adminData.currentPage, category = adminData.category) {
+  function handleGetDataList(page, category) {
     let target = adminData.selectedTarget;
     switch (target) {
       case 'product':
@@ -91,19 +95,18 @@ export const useAdminDataStore = defineStore('adminData', () => {
         target = 'products';
         break;
     }
-    let productCategory = category;
-    if (category === null) {
+    let currentPage = page;
+    if (page === undefined) {
+      currentPage = adminData.currentPage;
+    }
+    let productCategory = `&category=${category}`;
+    if (category === null || category === undefined) {
       productCategory = '';
     }
     axios
-      .get(
-        `${baseUrl}api/${apiPath}/admin/${target}/${
-          target !== 'product' ? `?page=${page}` : ''
-        }${productCategory}`,
-        {
-          token: adminStore.token,
-        },
-      )
+      .get(`${baseUrl}api/${apiPath}/admin/${target}/?page=${currentPage}${productCategory}`, {
+        token: adminStore.token,
+      })
       .then((res) => {
         // console.log(res.data);
         adminData.dataList = res.data[`${target}`];
@@ -120,7 +123,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
         token: adminStore.token,
       })
       .then(() => {
-        handleGetDataList();
+        handleGetDataList(adminData.currentPage, adminData.category);
       })
       .catch((err) => {
         console.dir(err);
@@ -143,7 +146,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
     axios
       .delete(`${baseUrl}api/${apiPath}/admin/${target}/${id}`, { token: adminStore.token })
       .then(() => {
-        handleGetDataList();
+        handleGetDataList(adminData.currentPage, adminData.category);
       })
       .catch((err) => {
         console.dir(err);
@@ -182,6 +185,7 @@ export const useAdminDataStore = defineStore('adminData', () => {
     handleDeleteData,
     handleImageUpload,
     handleSelectFunction,
+    handleResetTempProduct,
   };
 });
 export default useAdminDataStore;

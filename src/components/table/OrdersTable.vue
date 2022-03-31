@@ -33,20 +33,24 @@ export default {
 };
 </script>
 <template>
-  <table class="mb-4 bg-gray-50 rounded table-auto">
-    <thead class="bg-gray-800">
-      <tr class="text-white">
-        <td width="200" class="p-4 text-lg whitespace-nowrap">訂單編號</td>
-        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">訂購日期</td>
-        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">訂單總價</td>
-        <td width="250" class="p-4 text-lg text-center whitespace-nowrap">是否付款</td>
-        <td width="200" class="p-4 text-lg text-center whitespace-nowrap">查看細節</td>
-        <td colspan="2" width="400" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
+  <table class="table w-full">
+    <thead class="">
+      <tr class="text-secondary-200">
+        <td width="200" class="font-normal text-lg
+        whitespace-nowrap">訂單編號</td>
+        <td width="250" class="font-normal text-lg
+        text-right whitespace-nowrap">訂購日期</td>
+        <td width="250" class="font-normal text-lg
+        text-right whitespace-nowrap">訂單總價</td>
+        <td width="250" class="font-normal text-lg
+        text-center whitespace-nowrap">是否付款</td>
+        <td colspan="3" class="font-normal text-lg
+        text-center whitespace-nowrap">功能</td>
       </tr>
     </thead>
     <tbody>
       <tr
-        class="hover:bg-gray-200 border-b border-gray-300"
+        class="hover"
         v-for="item in adminData.dataList"
         :key="item.id"
       >
@@ -66,9 +70,9 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-primary-500 border-primary-500 border
-            rounded hover:shadow transition duration-200
-            hover:shadow-primary-400 hover:bg-primary-600 hover:text-primary-50"
+            class="py-2 px-4 text-primary-500 hover:text-primary-50 hover:bg-primary-600
+            rounded border border-primary-500 hover:shadow
+            hover:shadow-primary-400 transition duration-200"
             @click="openModal('getOrderDetail', item)"
           >
             查看細節
@@ -77,8 +81,8 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-secondary-50 bg-secondary-400 rounded
-            hover:bg-secondary-500 hover:shadow
+            class="py-2 px-4 text-secondary-50 bg-secondary-400 hover:bg-secondary-500
+            rounded hover:shadow
             hover:shadow-secondary-400 transition duration-200"
             @click="openModal('orderEdit', item)"
           >
@@ -88,9 +92,9 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-secondary-400 border border-secondary-300 rounded
-            transition duration-200 hover:border-transparent hover:text-white
-            hover:shadow hover:shadow-secondary-400 hover:bg-secondary-500"
+            class="py-2 px-4 text-secondary-400 hover:text-white hover:bg-secondary-500 rounded
+            border border-secondary-300 hover:border-transparent hover:shadow
+            hover:shadow-secondary-400 transition duration-200"
             @click="openModal('productDelete', item)"
           >
             刪除訂單

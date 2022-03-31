@@ -80,7 +80,7 @@ export default {
       :close-modal="handleOpenModal"
     />
     <form class="container p-4 space-y-4" @submit.prevent="handleProductAddition">
-      <div class="flex flex-wrap space-between">
+      <div class="flex flex-wrap justify-between">
         <div class="flex gap-4 justify-between w-full">
           <div class="flex-auto">
             <label for="userName" class="block mb-4"
@@ -130,8 +130,8 @@ export default {
           取消修改
         </button>
         <button
-          class="flex-auto py-2 text-white bg-primary-500 rounded-md
-          hover:bg-primary-600 hover:shadow hover:shadow-primary-400
+          class="flex-auto py-2 text-white bg-primary-500 hover:bg-primary-600
+          rounded-md hover:shadow hover:shadow-primary-400
           transition duration-300"
           type="submit"
         >

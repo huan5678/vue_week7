@@ -1,20 +1,40 @@
 <script>
-import { computed, ref } from 'vue';
+import {
+  computed,
+  ref,
+  reactive,
+  watch,
+} from 'vue';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Form } from 'vee-validate';
 import useStore from '@/stores';
 import ModalCardTitle from './ModalCardTitle.vue';
 
 export default {
-  components: { ModalCardTitle },
+  components: { ModalCardTitle, Form },
   props: { products: Object },
   setup(props, context) {
     const { adminDataStore } = useStore();
     const {
-      handleEditData, handleCreateData, handleImageUpload, functionSelected, adminData,
+      handleEditData,
+      handleCreateData,
+      handleImageUpload,
+      functionSelected,
+      handleResetTempProduct,
+      adminData,
     } = adminDataStore;
 
     const articleData = computed(() => adminData.tempProduct);
 
     const imageFile = ref(null);
+
+    const article = reactive({
+      content: '',
+    });
+
+    watch(() => articleData.value.description, (nv) => {
+      article.content = nv;
+    });
 
     const tagList = ref([
       {
@@ -48,17 +68,8 @@ export default {
     }
 
     function handleResetFormInput() {
-      articleData.value = {
-        title: '',
-        author: '',
-        isPublic: false,
-        content: '',
-        description: '',
-        create_at: '',
-        image: '',
-        tag: [],
-        created_at: 0,
-      };
+      handleResetTempProduct();
+      article.content = '';
       closeModal();
     }
 
@@ -66,10 +77,11 @@ export default {
       const data = {
         data: {
           title: articleData.value.title,
+          subTitle: articleData.value.subTitle,
           author: articleData.value.author,
           isPublic: articleData.value.isPublic,
-          content: articleData.value.content,
-          description: articleData.value.description,
+          content: ' ',
+          description: article.content,
           create_at: new Date().getTime(),
           image: articleData.value.image,
           tag: articleData.value.tag,
@@ -107,6 +119,12 @@ export default {
       handleGetImageUrl,
       handleOpenModal: context.attrs.handleOpenModal,
       closeModal,
+      editor: ClassicEditor,
+      editorConfig: {
+        placeholder: '請輸入文章...',
+        language: 'zh',
+      },
+      article,
     };
   },
 };
@@ -118,7 +136,7 @@ export default {
       :title="selectType === 'articleEdit' ? '內容編輯' : '新增文章'"
       :close-modal="handleOpenModal"
     />
-    <form class="container p-4 space-y-4" @submit.prevent="handleProductAddition">
+    <Form class="container p-4 space-y-4" @submit="handleProductAddition">
       <div class="flex gap-2 justify-between">
         <div class="flex-1">
           <label for="articleImage" class="block mb-4"
@@ -151,20 +169,20 @@ export default {
             type="text"
             id="articleName"
             name="articleName"
-            class="w-full rounded"
+            class="w-full form-style"
             v-model="articleData.title"
             required
           />
         </div>
         <div class="flex-auto">
-          <label for="articleDescription" class="block mb-4"
+          <label for="articleSubTitle" class="block mb-4"
             >文章副標題</label>
           <input
             type="text"
-            id="articleDescription"
-            name="articleDescription"
-            class="w-full rounded"
-            v-model="articleData.description"
+            id="articleSubTitle"
+            name="articleSubTitle"
+            class="w-full form-style"
+            v-model="articleData.subTitle"
             required
           />
         </div>
@@ -175,7 +193,7 @@ export default {
             type="text"
             id="articleAuthor"
             name="articleAuthor"
-            class="w-full rounded"
+            class="w-full form-style"
             v-model="articleData.author"
           />
         </div>
@@ -184,17 +202,17 @@ export default {
         <div class="flex-auto w-full">
           <label for="articleContent" class="block mb-4"
             >文章內容</label>
-          <textarea
-            id="articleContent"
-            name="articleContent"
-            class="w-full rounded"
-            v-model="articleData.content"
-          />
+          <ckeditor id="articleContent"
+          name="articleContent"
+          :editor="editor"
+          v-model="article.content"
+          :config="editorConfig"
+          ></ckeditor>
         </div>
         <div class="flex-auto w-1/4">
           <h3 class="block mb-4">文章是否公開</h3>
           <input id="articleIsEnable"
-            class="rounded"
+            class="toggle"
               type="checkbox"
               v-model="articleData.isPublic"
               />
@@ -207,16 +225,28 @@ export default {
           <div
           class="flex flex-wrap gap-2 justify-around items-center"
           >
-            <div v-for="tag in tagList" :key="tag.value">
-              <input
+            <div class="form-control" v-for="tag in tagList" :key="tag.value">
+              <label class="cursor-pointer label" :for="tag.value">
+                <input
                 type="checkbox"
-                class="rounded mr-1"
+                class="checkbox"
                 :id="tag.value"
                 v-model="articleData.tag"
                 :value="tag.value"
               >
-              <label :for="tag.value">
-                {{ tag.name }}
+                <span class="ml-2 label-text">{{ tag.name }}</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="cursor-pointer label" for="coupon">
+                <input
+                type="checkbox"
+                class="checkbox"
+                id="coupon"
+                v-model="articleData.tag"
+                value="coupon"
+              >
+                <span class="ml-2 label-text">優惠券</span>
               </label>
             </div>
           </div>
@@ -229,17 +259,17 @@ export default {
           @click="handleResetFormInput()"
           type="reset"
         >
-          {{ selectType === 'productEdit' ? '取消修改' : '取消新增' }}
+          {{ selectType === 'articleEdit' ? '取消修改' : '取消新增' }}
         </button>
         <button
-          class="flex-auto py-2 text-white bg-primary-500 rounded-md
-          hover:bg-primary-600 hover:shadow hover:shadow-primary-400
+          class="flex-auto py-2 text-white bg-primary-500 hover:bg-primary-600
+          rounded-md hover:shadow hover:shadow-primary-400
           transition duration-300"
           type="submit"
         >
-          {{ selectType === 'productEdit' ? '確定修改' : '新增文章' }}
+          {{ selectType === 'articleEdit' ? '確定修改' : '新增文章' }}
         </button>
       </div>
-    </form>
+    </Form>
   </section>
 </template>

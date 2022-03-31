@@ -5,7 +5,7 @@ import useStore from '@/stores';
 export default {
   setup() {
     const { adminDataStore } = useStore();
-    const { adminData, handleGetDataList, handleSelectFunction } = adminDataStore;
+    const { adminData, handleSelectFunction } = adminDataStore;
     const tempProduct = ref({
       title: '',
       category: '',
@@ -25,7 +25,6 @@ export default {
     }
 
     return {
-      handleGetDataList,
       openModal,
       tempProduct,
       adminData: computed(() => adminData),
@@ -34,26 +33,30 @@ export default {
 };
 </script>
 <template>
-  <table class="mb-4 bg-gray-50 rounded table-auto">
-    <thead class="bg-gray-800">
-      <tr class="text-white">
-        <td width="200" class="p-4 text-lg whitespace-nowrap">產品名稱</td>
-        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">原價</td>
-        <td width="250" class="p-4 text-lg text-right whitespace-nowrap">售價</td>
-        <td width="250" class="p-4 text-lg text-center whitespace-nowrap">是否啟用</td>
-        <td width="200" class="p-4 text-lg text-center whitespace-nowrap">查看細節</td>
-        <td colspan="2" width="400" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
+  <table class="table w-full">
+    <thead>
+      <tr class="text-secondary-400">
+        <td width="200" class="font-normal text-lg
+        whitespace-nowrap">產品名稱</td>
+        <td width="250" class="font-normal text-lg
+        text-right whitespace-nowrap">原價</td>
+        <td width="250" class="font-normal text-lg
+        text-right whitespace-nowrap">售價</td>
+        <td width="250" class="font-normal text-lg
+        text-center whitespace-nowrap">是否啟用</td>
+        <td colspan="3" width="400" class="font-normal text-lg
+        text-center whitespace-nowrap">功能</td>
       </tr>
     </thead>
     <tbody>
       <tr
-        class="hover:bg-gray-200 border-b border-gray-300"
+        class="hover"
         v-for="item in adminData.dataList"
         :key="item.id"
       >
-        <td class="py-2 px-4 whitespace-nowrap">{{ item.title }}</td>
-        <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.origin_price }}</td>
-        <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.price }}</td>
+        <td class="whitespace-nowrap">{{ item.title }}</td>
+        <td class="text-right whitespace-nowrap">{{ item.origin_price }}</td>
+        <td class="text-right whitespace-nowrap">{{ item.price }}</td>
         <td
           class="py-2 px-4 text-center text-primary-400 whitespace-nowrap"
           v-if="item.is_enabled == 1"
@@ -82,9 +85,10 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-primary-500 border-primary-500 border
-            rounded hover:shadow transition duration-200
-            hover:shadow-primary-400 hover:bg-primary-600 hover:text-primary-50"
+            class="font-normal text-primary-500 hover:text-primary-50
+            hover:bg-primary-500 hover:border-primary-500
+            transition duration-200 btn btn-outline
+            btn-xs sm:btn-sm md:btn-md"
             @click="openModal('getProductDetail', item)"
           >
             查看細節
@@ -93,9 +97,11 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-secondary-50 bg-secondary-400 rounded
-            hover:bg-secondary-500 hover:shadow
-            hover:shadow-secondary-400 transition duration-200"
+            class="font-normal text-secondary-400
+            hover:bg-secondary-500 border-secondary-400
+            hover:border-secondary-500 hover:text-secondary-200
+            transition duration-200 btn btn-outline
+            btn-xs sm:btn-sm md:btn-md"
             @click="openModal('productEdit', item)"
           >
             修改內容
@@ -104,9 +110,10 @@ export default {
         <td class="py-2 px-4 text-center whitespace-nowrap">
           <button
             type="button"
-            class="py-2 px-4 text-secondary-400 border border-secondary-300 rounded
-            transition duration-200 hover:border-transparent hover:text-white
-            hover:shadow hover:shadow-secondary-400 hover:bg-secondary-500"
+            class="font-normal text-red-400 hover:text-white
+            hover:bg-red-500 border border-red-300 hover:border-transparent
+            transition duration-200 btn btn-outline
+            btn-xs sm:btn-sm md:btn-md"
             @click="openModal('productDelete', item)"
           >
             刪除品項
@@ -119,9 +126,9 @@ export default {
     <p>目前有{{ adminData.dataList.length }}項產品</p>
     <button
       type="button"
-      class="py-2 px-4 text-primary-500 border border-primary-500
-        transition duration-200 rounded hover:text-primary-50
-        hover:shadow hover:shadow-primary-400 hover:bg-primary-600"
+      class="text-primary-500 hover:text-primary-50 hover:bg-primary-600 border border-primary-500
+        hover:border-primary-600 hover:shadow hover:shadow-primary-400 transition
+        duration-200 btn btn-outline"
       @click="openModal('productCreate', tempProduct)"
     >
       新增品項

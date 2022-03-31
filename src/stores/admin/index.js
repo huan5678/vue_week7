@@ -1,4 +1,5 @@
 import { ref, inject } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
@@ -8,20 +9,28 @@ export const useAdminStore = defineStore('admin', () => {
   const token = ref('');
   const expired = ref('');
   const isLoggedIn = ref(false);
+  const router = useRouter();
+  const params = useRoute();
 
   function handleCheckUser() {
-    axios.defaults.headers.common.Authorization = token.value;
-    vueAxios
-      .post(`${baseUrl}api/user/check`)
-      .then((res) => {
-        isLoggedIn.value = res.data.success;
-        return res.data.success;
-      })
-      .catch((err) => {
-        console.dir(err);
-        isLoggedIn.value = err.response.data.success;
-        return err.response.data.success;
-      });
+    if (token.value) {
+      axios.defaults.headers.common.Authorization = token.value;
+      vueAxios
+        .post(`${baseUrl}api/user/check`)
+        .then((res) => {
+          isLoggedIn.value = res.data.success;
+          if (params.name !== 'admin') {
+            router.push('admin');
+          }
+        })
+        .catch((err) => {
+          console.dir(err);
+          isLoggedIn.value = err.response.data.success;
+          router.push('login');
+        });
+    } else {
+      router.push('login');
+    }
   }
 
   function handleGetToken() {

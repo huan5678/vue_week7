@@ -1,15 +1,14 @@
 <script>
 import {
-  ref, inject, reactive, onBeforeMount,
+  ref,
+  inject,
+  reactive,
+  onBeforeMount,
 } from 'vue';
 import { useRouter } from 'vue-router';
 import useStore from '@/stores';
-import AlertModal from '@/components/AlertModal.vue';
 
 export default {
-  components: {
-    AlertModal,
-  },
   setup() {
     const baseUrl = process.env.VUE_APP_API_URL;
     const axios = inject('axios');
@@ -54,17 +53,13 @@ export default {
         });
     }
 
-    const cancel = function () {
+    const handleCloseModal = function () {
       openModal.value = false;
     };
 
     onBeforeMount(() => {
       handleGetToken();
-      if (handleCheckUser()) {
-        router.push('/login');
-      } else {
-        router.push('/admin');
-      }
+      handleCheckUser();
     });
 
     return {
@@ -72,7 +67,7 @@ export default {
       userPassword,
       handlerSubmit,
       openModal,
-      cancel,
+      handleCloseModal,
       modalMessage,
     };
   },
